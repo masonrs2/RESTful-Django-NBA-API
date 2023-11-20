@@ -16,7 +16,7 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 1. `/api/{team}/{stat}`: Returns the players from the specified team who lead in the specified stat for the 2023-24 season.
    - [team](file:///c%3A/Users/mason/Documents/Projects/Python/NBA/stats/stats/api.py#12%2C29-12%2C29): The team's full name, abbreviation, or nickname (case-insensitive).
    - [stat](file:///c%3A/Users/mason/Documents/Projects/Python/NBA/stats/stats/api.py#12%2C48-12%2C48): The stat to sort by (case-insensitive).
-   - Example: `curl http://127.0.0.1:8000/api/stats/Lakers/points`
+   - Example: `curl http://127.0.0.1:8000/api/stats/Lakers/pts`
 
 2. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers`
