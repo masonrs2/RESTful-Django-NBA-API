@@ -14,21 +14,28 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 ## API Endpoints
 
 1. `/api/{team}/{stat}`: Returns the players from the specified team who lead in the specified stat for the 2023-24 season.
-   - [team](file:///c%3A/Users/mason/Documents/Projects/Python/NBA/stats/stats/api.py#12%2C29-12%2C29): The team's full name, abbreviation, or nickname (case-insensitive).
-   - [stat](file:///c%3A/Users/mason/Documents/Projects/Python/NBA/stats/stats/api.py#12%2C48-12%2C48): The stat to sort by (case-insensitive).
+   - [team] The team's full name, abbreviation, or nickname (case-insensitive).
+   - [stat] The stat to sort by (case-insensitive).
    - Example: `curl http://127.0.0.1:8000/api/stats/Lakers/pts`
 
-2. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
+2. `/api/schedule`: Returns the game results for a specified team for the 2023-24 season.
+   - `team`: The team's full name, abbreviation, or nickname (case-insensitive). This is a required parameter.
+   - `season`: The season for which to get game results. This is an optional parameter. If not provided, the default season is 2023-24.
+   - Example: `curl http://127.0.0.1:8000/api/schedule?team=Lakers&season=2023`
+
+3. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers`
 
-3. `/api/leadingAssists`: Returns the leading players in assists for the 2023-24 season.
+4. `/api/leadingAssists`: Returns the leading players in assists for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingAssists`
    
-4. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
+5. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingSteals`
 
-5. `/api/leadingAssists`: Returns the leading players in blocks for the 2023-24 season.
+6. `/api/leadingAssists`: Returns the leading players in blocks for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingBlocks`
 
-6. `/api/leadingAssists`: Returns the leading players in rebounds for the 2023-24 season.
+7. `/api/leadingAssists`: Returns the leading players in rebounds for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingRebounds`
+
+
