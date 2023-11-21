@@ -1,44 +1,44 @@
 import json
-import pandas as pd
-from typing import Optional
-from ninja import Router
-from nba_api.stats.static import teams
-from nba_api.stats.endpoints import leaguedashplayerstats, leaguegamefinder
+from typing import Optional, List
+from ninja import NinjaAPI
+from nba_api.stats.endpoints import leaguegamefinder
 from nba_api.live.nba.endpoints import scoreboard
 from nba_api.live.nba.endpoints import boxscore
-from .constants.constants import keep_columns, all_stats_columns, GetTeamsDict, GetTeamsList
+from .constants.constants import all_stats_columns, GetTeamsDict
 from .Enums.stats import Stats
 from ninja.errors import HttpError
-from datetime import datetime, timezone
+from datetime import timezone
 from dateutil import parser
+from .Schema import PlayerSchema, NotFoundSchema
+from .Models import Player
+from django.http import JsonResponse
+from .Models import Player
+from .Services import GetPlayerStats, GetPlayerStatsDf
 
-router = Router()
-
-# TODO: Add a route given a team and a type of stat, we will return the bottom 3 players on that team for that stat (given the player has played an average of at least 12 minutes per game) 
-
+api = NinjaAPI()
 
 ## Should add the season parameter in all routes here instead of hard coding
-@router.get("/leadingScorers")
+@api.get("/leadingScorers")
 def leadingScorers(request):
     return GetPlayerStats("2023-24", Stats.POINTS_PER_GAME.value)
 
-@router.get("/leadingAssists")
+@api.get("/leadingAssists")
 def leadingAssists(request):
     return GetPlayerStats("2023-24", Stats.ASSISTS.value)
 
-@router.get("/leadingRebounds")
+@api.get("/leadingRebounds")
 def leadingRebounds(request):
     return GetPlayerStats("2023-24", Stats.REBOUNDS.value)
 
-@router.get("/leadingBlocks")
+@api.get("/leadingBlocks")
 def leadingBlocks(request):
     return GetPlayerStats("2023-24", Stats.BLOCKS.value)
 
-@router.get("/leadingSteals")
+@api.get("/leadingSteals")
 def leadingSteals(request):
     return GetPlayerStats("2023-24", Stats.STEALS.value)
 
-@router.get("/{team}/{stat}")
+@api.get("/{team}/{stat}")
 def leadingStatsByTeam(request, team: str, stat: str):
     try:
         team = team.lower()
@@ -71,7 +71,7 @@ def leadingStatsByTeam(request, team: str, stat: str):
         print("An error occurred:", e)
         raise HttpError(500,"Invalid Query Parameter Passed.")
 
-@router.get("/schedule")
+@api.get("/schedule")
 def GetGameResultsByTeam(request, team: str, season: Optional[str] = None):
     try:
         team = team.lower()
@@ -101,7 +101,7 @@ def GetGameResultsByTeam(request, team: str, season: Optional[str] = None):
         print("An error occurred:", e)
         raise HttpError(500,"Invalid Query Parameter Passed.")
 
-@router.get("/todaysGames")
+@api.get("/todaysGames")
 def GetTodaysGames(request): 
     try:
         f = "{gameId}: {awayTeam} vs. {homeTeam} @ {gameTimeLTZ}" 
@@ -138,7 +138,7 @@ def GetTodaysGames(request):
     
     return json.dumps(todaysGames)
 
-@router.get("/game")
+@api.get("/game")
 def GetGameBoxScore(request, gameId: int):
     try:
         gameId = str(gameId)
@@ -164,21 +164,35 @@ def GetGameBoxScore(request, gameId: int):
         raise HttpError(500,"Invalid Query Parameter Passed.")
     return json.dumps(box)
 
+@api.post("/wishlist", response={201: PlayerSchema})
+def AddPlayerToWishlist(request, player: PlayerSchema):
+    try:
+        # Create a new Player instance and save it to the database
+        Player.objects.create(
+            first_name=player.first_name,
+            last_name=player.last_name,
+            team=player.team,
+            player_id=player.player_id
+        )
+
+        # Return a success response
+        return JsonResponse({'message': 'Player added to wishlist successfully.'}, status=201)
+
+    except Exception as e:
+        # If something goes wrong, return an error response
+        return JsonResponse({'error': str(e)}, status=400)
+
+@api.get("/wishlist", response={200: List[PlayerSchema], 404: NotFoundSchema})
+def GetWishList(request):
+    try:
+        wishlist = Player.objects.all()
+        if not wishlist:
+            wishlist = []
+            return JsonResponse({'message': 'No Players in wishlist.'}, stats=201), []
+        
+        return 200, wishlist
+    except Exception as e:
+        return 404, {"message": str(e)}
 ## TODO: Need to add routes for all-time leaders for each stat not just for a particular season
 
 ## might need to add a team paramter and if there is a team paramter we need to filter the df by that team and then sort by the stat potentially
-def GetPlayerStats(season, sort_by):
-    df = GetPlayerStatsDf(season)
-
-    # might need to abstract these 2 lines into another function since there may be times where we need to sort by ascending order
-    df_sorted = df.sort_values(by=[sort_by], ascending=False)
-    sorted_json = df_sorted.to_json(orient='records')
-
-    return sorted_json
-
-def GetPlayerStatsDf(season):
-    player_stats = leaguedashplayerstats.LeagueDashPlayerStats(season=season)
-    df = player_stats.get_data_frames()[0]
-    df = df[keep_columns]
-    df[Stats.POINTS_PER_GAME.value] = df[Stats.POINTS.value] / df[Stats.GAMES_PLAYED.value]
-    return df

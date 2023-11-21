@@ -2,16 +2,13 @@ from django.contrib import admin
 from django.urls import path
 from .views import SignUpView, CheckLoginView
 from ninja import NinjaAPI
-from stats.api import router
+from .api import api
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     # ... other paths ...
 ]
-
-api = NinjaAPI()
-api.add_router("stats/", router)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

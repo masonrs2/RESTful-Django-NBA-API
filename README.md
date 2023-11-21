@@ -21,7 +21,7 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 2. `/api/schedule`: Returns the game results for a specified team for the 2023-24 season.
    - `team`: The team's full name, abbreviation, or nickname (case-insensitive). This is a required parameter.
    - `season`: The season for which to get game results. This is an optional parameter. If not provided, the default season is 2023-24.
-   - Example: `curl http://127.0.0.1:8000/api/schedule?team=Lakers&season=2023`
+   - Example: `curl http://127.0.0.1:8000/api/schedule?team=Lakers` (This example defaults season=2023 since no input for the parameter was given)
 
 3. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers`
