@@ -5,6 +5,7 @@ from ninja import Router
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import leaguedashplayerstats, leaguegamefinder
 from nba_api.live.nba.endpoints import scoreboard
+from nba_api.live.nba.endpoints import boxscore
 from .constants.constants import keep_columns, all_stats_columns, GetTeamsDict, GetTeamsList
 from .Enums.stats import Stats
 from ninja.errors import HttpError
@@ -108,15 +109,26 @@ def GetTodaysGames(request):
         board = scoreboard.ScoreBoard()
         if not board: 
             return json.dumps([])
-        
+
+        if not board.score_board_date:
+            print("Invalid score board date.")
+            raise HttpError(400, "Invalid score board date.")
         print("ScoreBoardDate: " + board.score_board_date)
+
         games = board.games.get_dict()
         if not games: 
             return json.dumps([])
-        
+
         todaysGames = []
         for game in games:
-            gameTimeLTZ = parser.parse(game["gameTimeUTC"]).replace(tzinfo=timezone.utc).astimezone(tz=None)
+            if not all(key in game for key in ("gameId", "awayTeam", "homeTeam", "gameTimeUTC")):
+                print("Invalid game data.")
+                raise HttpError(400, "Invalid game data.")
+            try:
+                gameTimeLTZ = parser.parse(game["gameTimeUTC"]).replace(tzinfo=timezone.utc).astimezone(tz=None)
+            except ValueError:
+                print("Invalid game time.")
+                raise HttpError(400, "Invalid game time.")
             game_info = f.format(gameId=game['gameId'], awayTeam=game['awayTeam']['teamName'], homeTeam=game['homeTeam']['teamName'], gameTimeLTZ=gameTimeLTZ)
             todaysGames.append(game_info)
 
@@ -125,6 +137,33 @@ def GetTodaysGames(request):
         raise HttpError(500,"Invalid Query Parameter Passed.")
     
     return json.dumps(todaysGames)
+
+@router.get("/game")
+def GetGameBoxScore(request, gameId: int):
+    try:
+        gameId = str(gameId)
+        gameId = str(gameId).zfill(10)  # Pad the gameId with leading zeros if necessary
+        if not gameId.isdigit():
+            print("Invalid gameId provided. gameId should be numeric.", gameId)
+            raise HttpError(400, "Invalid gameId provided. gameId should be numeric.")
+        if len(gameId) < 10:
+            print("Invalid gameId provided. gameId should be at least 10 characters long.", gameId)
+            raise HttpError(400, "Invalid gameId provided. gameId should be at least 10 characters long.", gameId)
+        if int(gameId) <= 0:
+            print("Invalid gameId provided. gameId should be positive.")
+            raise HttpError(400, "Invalid gameId provided. gameId should be positive.")
+
+        box = boxscore.BoxScore(gameId)
+        box = box.game.get_dict()
+        if not box:
+            print("No box score data found for the provided gameId.")
+            raise HttpError(404, "No box score data found for the provided gameId.")
+
+    except Exception as e:
+        print("An error occurred:", e)
+        raise HttpError(500,"Invalid Query Parameter Passed.")
+    return json.dumps(box)
+
 ## TODO: Need to add routes for all-time leaders for each stat not just for a particular season
 
 ## might need to add a team paramter and if there is a team paramter we need to filter the df by that team and then sort by the stat potentially
