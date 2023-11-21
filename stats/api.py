@@ -4,9 +4,12 @@ from typing import Optional
 from ninja import Router
 from nba_api.stats.static import teams
 from nba_api.stats.endpoints import leaguedashplayerstats, leaguegamefinder
+from nba_api.live.nba.endpoints import scoreboard
 from .constants.constants import keep_columns, all_stats_columns, GetTeamsDict, GetTeamsList
 from .Enums.stats import Stats
 from ninja.errors import HttpError
+from datetime import datetime, timezone
+from dateutil import parser
 
 router = Router()
 
@@ -97,8 +100,31 @@ def GetGameResultsByTeam(request, team: str, season: Optional[str] = None):
         print("An error occurred:", e)
         raise HttpError(500,"Invalid Query Parameter Passed.")
 
-## TODO: Get the W/L history for a specified team.
+@router.get("/todaysGames")
+def GetTodaysGames(request): 
+    try:
+        f = "{gameId}: {awayTeam} vs. {homeTeam} @ {gameTimeLTZ}" 
 
+        board = scoreboard.ScoreBoard()
+        if not board: 
+            return json.dumps([])
+        
+        print("ScoreBoardDate: " + board.score_board_date)
+        games = board.games.get_dict()
+        if not games: 
+            return json.dumps([])
+        
+        todaysGames = []
+        for game in games:
+            gameTimeLTZ = parser.parse(game["gameTimeUTC"]).replace(tzinfo=timezone.utc).astimezone(tz=None)
+            game_info = f.format(gameId=game['gameId'], awayTeam=game['awayTeam']['teamName'], homeTeam=game['homeTeam']['teamName'], gameTimeLTZ=gameTimeLTZ)
+            todaysGames.append(game_info)
+
+    except Exception as e:
+        print("An error occurred:", e)
+        raise HttpError(500,"Invalid Query Parameter Passed.")
+    
+    return json.dumps(todaysGames)
 ## TODO: Need to add routes for all-time leaders for each stat not just for a particular season
 
 ## might need to add a team paramter and if there is a team paramter we need to filter the df by that team and then sort by the stat potentially
