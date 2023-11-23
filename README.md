@@ -38,4 +38,15 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 7. `/api/leadingAssists`: Returns the leading players in rebounds for the 2023-24 season.
    - Example: `curl http://127.0.0.1:8000/api/stats/leadingRebounds`
 
+8. `/api/wishlist`: POST request to add a player to the user's watchlist.
+   - [first_name]: The first name of the player. This is a required parameter.
+   - [last_name]: The last name of the player. This is a required parameter.
+   - [team]: The team of the player. This is a required parameter.
+   - [player_id]: The unique ID of the player. This is a required parameter.
+   - Example: `curl -X POST -H "Content-Type: application/json" -d '{"first_name": "LeBron", "last_name": "James", "team": "Lakers", "player_id": 2544}' http://127.0.0.1:8000/api/watchlist`
+
+9. `/api/wishlist`: GET request to retrieve all players in the user's watchlist.
+   - No parameters required.
+   - Example: `curl http://127.0.0.1:8000/api/watchlist`
+
 

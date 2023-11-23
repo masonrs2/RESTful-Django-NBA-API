@@ -164,7 +164,7 @@ def GetGameBoxScore(request, gameId: int):
         raise HttpError(500,"Invalid Query Parameter Passed.")
     return json.dumps(box)
 
-@api.post("/wishlist", response={201: PlayerSchema})
+@api.post("/watchlist", response={201: PlayerSchema})
 def AddPlayerToWishlist(request, player: PlayerSchema):
     try:
         # Create a new Player instance and save it to the database
@@ -182,15 +182,15 @@ def AddPlayerToWishlist(request, player: PlayerSchema):
         # If something goes wrong, return an error response
         return JsonResponse({'error': str(e)}, status=400)
 
-@api.get("/wishlist", response={200: List[PlayerSchema], 404: NotFoundSchema})
+@api.get("/watchlist", response={200: List[PlayerSchema], 404: NotFoundSchema})
 def GetWishList(request):
     try:
-        wishlist = Player.objects.all()
-        if not wishlist:
-            wishlist = []
+        watchlist = Player.objects.all()
+        if not watchlist:
+            watchlist = []
             return JsonResponse({'message': 'No Players in wishlist.'}, stats=201), []
         
-        return 200, wishlist
+        return 200, watchlist
     except Exception as e:
         return 404, {"message": str(e)}
 ## TODO: Need to add routes for all-time leaders for each stat not just for a particular season
