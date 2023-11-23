@@ -12,6 +12,7 @@ from dateutil import parser
 from .Schema import PlayerSchema, NotFoundSchema
 from .Models import Player
 from django.http import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
 from .Models import Player
 from .Services import GetPlayerStats, GetPlayerStatsDf
 
@@ -169,6 +170,7 @@ def AddPlayerToWishlist(request, player: PlayerSchema):
     try:
         # Create a new Player instance and save it to the database
         Player.objects.create(
+            username=player.username,
             first_name=player.first_name,
             last_name=player.last_name,
             team=player.team,
@@ -193,6 +195,17 @@ def GetWishList(request):
         return 200, watchlist
     except Exception as e:
         return 404, {"message": str(e)}
-## TODO: Need to add routes for all-time leaders for each stat not just for a particular season
 
-## might need to add a team paramter and if there is a team paramter we need to filter the df by that team and then sort by the stat potentially
+@api.delete("/watchlist")
+def DeletePlayerFromWishlist(request, player_id: int, username: str): 
+    try: 
+        player = Player.objects.get(player_id=player_id, username=username)
+        player.delete()
+        return JsonResponse({'message': 'Player deleted from wishlist successfully.'}, status=200)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Player not found in wishlist.'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+
+## TODO: Need to add routes for all-time leaders for each stat not just for a particular season

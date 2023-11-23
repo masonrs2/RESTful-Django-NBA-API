@@ -7,6 +7,7 @@ This project extends the NBA_API to provide more customizable data queries.
 1. Ensure you have Python and Django installed on your system.
 2. Clone the repository: git clone https://github.com/masonrs2/RESTful-NBA-API.git
 3. Navigate to the project directory: cd RESTful-NBA-API
+4. Install dependencies (Django, django-dev python-decouple)
 4. Run the Django development server: python manage.py runserver
 
 The server will start running at `http://127.0.0.1:8000/`. You can access the API endpoints from your web browser or a tool like curl or Postman.
@@ -43,7 +44,7 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
    - [last_name]: The last name of the player. This is a required parameter.
    - [team]: The team of the player. This is a required parameter.
    - [player_id]: The unique ID of the player. This is a required parameter.
-   - Example: `curl -X POST -H "Content-Type: application/json" -d '{"first_name": "LeBron", "last_name": "James", "team": "Lakers", "player_id": 2544}' http://127.0.0.1:8000/api/watchlist`
+   - Example: `curl -X POST -d '{"username": "username123", "first_name": "Lebron", "last_name": "James", "team": "Lakers", "player_id": 2544}' http://127.0.0.1:8000/api/watchlist`
 
 9. `/api/wishlist`: GET request to retrieve all players in the user's watchlist.
    - No parameters required.
