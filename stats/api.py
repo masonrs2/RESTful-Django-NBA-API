@@ -30,20 +30,40 @@ def leadingScorers(request, season: str = "2023-24"):
         return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/leadingAssists")
-def leadingAssists(request):
-    return GetPlayerStats("2023-24", Stats.ASSISTS.value)
+def leadingAssists(request, season: str = "2023-24"):
+    try:
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        return GetPlayerStats(season, Stats.ASSISTS.value)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/leadingRebounds")
-def leadingRebounds(request):
-    return GetPlayerStats("2023-24", Stats.REBOUNDS.value)
+def leadingRebounds(request, season: str = "2023-24"):
+    try:
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        return GetPlayerStats(season, Stats.REBOUNDS.value)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/leadingBlocks")
-def leadingBlocks(request):
-    return GetPlayerStats("2023-24", Stats.BLOCKS.value)
+def leadingBlocks(request, season: str = "2023-24"):
+    try:
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        return GetPlayerStats(season, Stats.BLOCKS.value)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/leadingSteals")
-def leadingSteals(request):
-    return GetPlayerStats("2023-24", Stats.STEALS.value)
+def leadingSteals(request, season: str = "2023-24"):
+    try:
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        return GetPlayerStats(season, Stats.STEALS.value)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/{team}/{stat}")
 def leadingStatsByTeam(request, team: str, stat: str):

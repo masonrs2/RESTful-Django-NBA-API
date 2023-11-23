@@ -2,7 +2,7 @@ from stats.Models import Player
 from nba_api.stats.endpoints import leaguedashplayerstats
 from stats.constants.constants import keep_columns
 from stats.Enums.stats import Stats
-
+import pandas as pd
 
 def GetPlayerStats(season, sort_by):
     df = GetPlayerStatsDf(season)

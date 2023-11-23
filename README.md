@@ -31,20 +31,26 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
    - `season`: The season for which to get game results. This is an optional parameter. If not provided, the default season is 2023-24.
    - Example: `curl http://127.0.0.1:8000/api/schedule?team=Lakers` (This example defaults season=2023 since no input for the parameter was given)
 
-3. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers`
+3. `/api/leadingScorers`: Returns the leading players in points for a given season entered by the user. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+   - [stat] The stat to sort by (case-insensitive).
+   - `season`: The season in the format YYYY-YY. This is an optional parameter.
+   - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers?season=2022-23`
 
-4. `/api/leadingAssists`: Returns the leading players in assists for the 2023-24 season.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingAssists`
-   
-5. `/api/leadingScorers`: Returns the leading scorers for the 2023-24 season.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingSteals`
+4. `/api/leadingAssists`: Returns the leading players in assists for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+   - [season]: The season in the format YYYY-YY. This is an optional parameter.
+   - Example: `curl http://127.0.0.1:8000/api/stats/leadingAssists?season=2022-23`
 
-6. `/api/leadingAssists`: Returns the leading players in blocks for the 2023-24 season.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingBlocks`
+5. `/api/leadingRebounds`: Returns the leading players in rebounds for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+   - [season]: The season in the format YYYY-YY. This is an optional parameter.
+   - Example: `curl http://127.0.0.1:8000/api/stats/leadingRebounds?season=2022-23`
 
-7. `/api/leadingAssists`: Returns the leading players in rebounds for the 2023-24 season.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingRebounds`
+6. `/api/leadingBlocks`: Returns the leading players in blocks for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+   - [season]: The season in the format YYYY-YY. This is an optional parameter.
+   - Example: `curl http://127.0.0.1:8000/api/stats/leadingBlocks?season=2022-23`
+
+7. `/api/leadingSteals`: Returns the leading players in steals for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+   - [season]: The season in the format YYYY-YY. This is an optional parameter.
+   - Example: `curl http://127.0.0.1:8000/api/stats/leadingSteals?season=2022-23`
 
 8. `/api/wishlist`: POST request to add a player to the user's watchlist.
    - [first_name]: The first name of the player. This is a required parameter.
