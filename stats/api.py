@@ -10,18 +10,24 @@ from ninja.errors import HttpError
 from datetime import timezone
 from dateutil import parser
 from .Schema import PlayerSchema, NotFoundSchema
+from .Schema.MessageSchema import MessageSchema
 from .Models import Player
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from .Models import Player
 from .Services import GetPlayerStats, GetPlayerStatsDf
+import re
 
 api = NinjaAPI()
 
-## Should add the season parameter in all routes here instead of hard coding
 @api.get("/leadingScorers")
-def leadingScorers(request):
-    return GetPlayerStats("2023-24", Stats.POINTS_PER_GAME.value)
+def leadingScorers(request, season: str = "2023-24"):
+    try:
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        return GetPlayerStats(season, Stats.POINTS_PER_GAME.value)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 @api.get("/leadingAssists")
 def leadingAssists(request):
@@ -184,13 +190,12 @@ def AddPlayerToWishlist(request, player: PlayerSchema):
         # If something goes wrong, return an error response
         return JsonResponse({'error': str(e)}, status=400)
 
-@api.get("/watchlist", response={200: List[PlayerSchema], 404: NotFoundSchema})
-def GetWishList(request):
+@api.get("/watchlist", response={200: List[PlayerSchema], 201: MessageSchema, 404: NotFoundSchema})
+def GetWishList(request, username: str):
     try:
-        watchlist = Player.objects.all()
+        watchlist = Player.objects.filter(username=username)
         if not watchlist:
-            watchlist = []
-            return JsonResponse({'message': 'No Players in wishlist.'}, stats=201), []
+            return 201, {"message": 'No Players in wishlist.'}
         
         return 200, watchlist
     except Exception as e:
