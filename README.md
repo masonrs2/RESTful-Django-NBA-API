@@ -8,8 +8,15 @@ This project extends the NBA_API to provide more customizable data queries.
 2. Clone the repository: git clone https://github.com/masonrs2/RESTful-NBA-API.git
 3. Navigate to the project directory: cd RESTful-NBA-API
 4. Install dependencies (Django, django-dev python-decouple)
-4. Run the Django development server: python manage.py runserver
+4. Install dependencies (Django, django-dev python-decouple, psycopg2, nba_api): `pip install -r requirements.txt`
+5. Create a `.env` file in the project root directory and add your PostgreSQL database configurations:
+DATABASE_NAME=your_database_name
+DATABASE_USER=your_database_user
+DATABASE_PASSWORD=your_database_password
+DATABASE_HOST=your_database_host
+DATABASE_PORT=your_database_port
 
+6. Run the Django development server: `python manage.py runserver`
 The server will start running at `http://127.0.0.1:8000/`. You can access the API endpoints from your web browser or a tool like curl or Postman.
 
 ## API Endpoints
@@ -49,5 +56,10 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 9. `/api/wishlist`: GET request to retrieve all players in the user's watchlist.
    - No parameters required.
    - Example: `curl http://127.0.0.1:8000/api/watchlist`
+
+10. [/api/watchlist] DELETE request to remove a player from the user's watchlist.
+   - [player_id]: The unique ID of the player. This is a required parameter.
+   - [username]: The username of the user. This is a required parameter.
+   - Example: `curl -X DELETE 'http://127.0.0.1:8000/api/watchlist?player_id=2544&username=username123'`
 
 
