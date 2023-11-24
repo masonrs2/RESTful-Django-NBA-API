@@ -1,10 +1,12 @@
-import './App.css'
+import Navbar from "./components/Navbar"
+import { StatsLeadingCards } from "./components/StatsLeadingCards"
 
 function App() {
 
   return (
-    <div>
-      <h1 className='text-blue-300 '>React App</h1>
+    <div className='bg-zinc-800 h-screen w-screen'>
+      <Navbar />
+      <StatsLeadingCards />
     </div>
   )
 }
