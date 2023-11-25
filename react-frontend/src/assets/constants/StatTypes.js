@@ -38,12 +38,13 @@ export const AllStatTypes = [
 ];
 
 export const LeadingStats = [
-  { Abbreviation: "PPG", Stat: "Points Per Game" },
-  { Abbreviation: "REB", Stat: "Rebounds Per Game" },
-  { Abbreviation: "AST", Stat: "Assists Per Game" },
-  { Abbreviation: "STL", Stat: "Steals Per Game" },
+  { Abbreviation: "PPG", Stat: "Points" },
+  { Abbreviation: "REB", Stat: "Rebounds" },
+  { Abbreviation: "AST", Stat: "Assists" },
+  { Abbreviation: "STL", Stat: "Steals" },
   { Abbreviation: "BLK", Stat: "Blocks" },
   { Abbreviation: "FG_PCT", Stat: "Field Goal %" },
   { Abbreviation: "FG3_PCT", Stat: "3-Point %" },
-  { Abbreviation: "MIN", Stat: "Minutes Per Game" },
+  { Abbreviation: "MIN", Stat: "Minutes" },
+  { Abbreviation: "TOV", Stat: "Turnovers" },
 ];

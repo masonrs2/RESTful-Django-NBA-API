@@ -20,7 +20,7 @@ import re
 
 api = NinjaAPI()
 
-@api.get("/leadingScorers")
+@api.get("/leadingPoints")
 def leadingScorers(request, season: str = "2023-24"):
     try:
         if not re.match(r"\d{4}-\d{2}", season):
