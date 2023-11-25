@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { TeamLogos, getTeamLogo } from "../assets/constants/TeamLogos";
 import { TfiUser } from "react-icons/tfi"
+import { Link } from "react-router-dom"
 
 const StatCard = ({ key, stat }) => {
     const [playerData, setPlayerData] = useState([]);
@@ -46,7 +47,7 @@ const StatCard = ({ key, stat }) => {
       <div className="outline outline-gray-500 outline-[.5px]">
         <Table className="">  
             <TableBody>
-                <TableRow className="cursor-pointer">
+                <TableRow className="cursor-pointer hover:bg-zinc-800">
                 <TableCell>
                     <p className="text-2xl font-semibold">1</p>
                     </TableCell>
@@ -83,17 +84,17 @@ const StatCard = ({ key, stat }) => {
       <div>
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className=" border-b-[.5px] border-zinc-700  hover:bg-zinc-800/60">
               <TableHead>Rank</TableHead>
               <TableHead>Team</TableHead>
               <TableHead>Player</TableHead>
-              <TableHead>{stat.Abbreviation}</TableHead>
+              <TableHead>{stat?.Abbreviation.slice(0,1)}PG</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {
               Array.isArray(playerData) &&  playerData.slice(1,6).map((player, index) => (
-                <TableRow className="cursor-pointer" key={index+1}>
+                <TableRow className="cursor-pointer border-t-[.5px] border-zinc-700 hover:bg-zinc-800/60" key={index+1}>
                     <TableCell className="font-semibold">{index+2}</TableCell>
                     <TableCell className="flex gap-4 items-center ">
                         <div className="w-8 h-8 rounded-full overflow-hidden flex items-center">
@@ -101,7 +102,7 @@ const StatCard = ({ key, stat }) => {
                         </div>{player?.TEAM_ABBREVIATION}
                     </TableCell>
                     <TableCell>{player?.PLAYER_NAME}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-light ">
                         {stat.Abbreviation === "PPG" 
                             ? player[stat.Abbreviation].toFixed(1) 
                             : (player[stat.Abbreviation] / player?.GP).toFixed(1)
@@ -112,6 +113,12 @@ const StatCard = ({ key, stat }) => {
             }
           </TableBody>
         </Table>
+
+        <div className="w-full flex items-center justify-center py-5 text-sm font-light tracking-wide border-t-[.5px] border-zinc-700 ">
+            <Link href="/">
+                <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
+            </Link>
+        </div>
       </div>
     </div>
   );
