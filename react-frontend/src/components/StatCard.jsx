@@ -10,11 +10,16 @@ import {
 import { TeamLogos, getTeamLogo } from "../assets/constants/TeamLogos";
 import { TfiUser } from "react-icons/tfi"
 import { Link } from "react-router-dom"
+import { useDispatch } from "react-redux";
+import { setPlayerDataStore } from "../redux/playerDataSlice";
 
 const StatCard = ({ key, stat }) => {
     const [playerData, setPlayerData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const dispatch = useDispatch();
 
     const fetchData = (stat) => {
+      setIsLoading(true);
       fetch(`http://127.0.0.1:8000/api/leading${stat}?season=2023-24`)
         .then(response => {
           if (!response.ok) {
@@ -23,10 +28,14 @@ const StatCard = ({ key, stat }) => {
           return response.json();
         })
         .then(fetchedData => {
-          setPlayerData(JSON.parse(fetchedData))
+          const parsedData = JSON.parse(fetchedData);
+          setPlayerData(parsedData);
+          dispatch(setPlayerDataStore(parsedData));
+          setIsLoading(false);
         })
         .catch(error => {
           console.log('Fetch error:', error);
+          setIsLoading(false);
         });
     }
   
@@ -115,9 +124,14 @@ const StatCard = ({ key, stat }) => {
         </Table>
 
         <div className="w-full flex items-center justify-center py-5 text-sm font-light tracking-wide border-t-[.5px] border-zinc-700 ">
-            <Link href="/">
-                <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
-            </Link>
+          {
+            !isLoading && playerData.length > 0 && (
+              <Link to={{
+                pathname: `/nba/stats/players/${stat.Stat}`,
+              }}>
+                  <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
+              </Link>
+          )}
         </div>
       </div>
     </div>
