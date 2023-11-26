@@ -14,6 +14,8 @@ all_stats_columns = [
     'TOV', 'STL', 'BLK', 'BLKA', 'PF', 'PFD', 'PTS', 'PLUS_MINUS','NBA_FANTASY_PTS', 'PLUS_MINUS_RANK', 'NBA_FANTASY_PTS_RANK', 'PPG'
 ] 
 
+valid_team_stats = ['PTS', 'STL', 'BLK', 'REB', 'AST', 'FGM', 'FGA', 'FG3M', 'FG3A', 'FTM', 'FTA', 'TOV', "GP", "PPG"]
+
 def GetTeamsList():
     teams_data = teams.get_teams()
     teams_info = [item for team in teams_data for item in [team['full_name'], team['abbreviation'], team['nickname'], team['city']]]

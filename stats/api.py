@@ -5,7 +5,7 @@ from nba_api.stats.endpoints import leaguegamefinder
 from nba_api.live.nba.endpoints import scoreboard
 from nba_api.live.nba.endpoints import boxscore
 from nba_api.stats.static import teams
-from .constants.constants import all_stats_columns, GetTeamsDict, GetTeamsList
+from .constants.constants import all_stats_columns, GetTeamsDict, valid_team_stats
 from .Enums.stats import Stats
 from ninja.errors import HttpError
 from datetime import timezone
@@ -15,6 +15,7 @@ from .Schema.MessageSchema import MessageSchema
 from .Models import Player
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 from .Models import Player
 from .Services import GetPlayerStats, GetPlayerStatsDf
 import re
@@ -195,6 +196,16 @@ def GetGameBoxScore(request, gameId: int):
 @api.get("/leadingTeamStats")
 def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
     try: 
+        # Check if stat is valid
+        if stat not in valid_team_stats:
+            return JsonResponse({'error': 'Invalid stat. It should be one of ' + ', '.join(valid_team_stats) + '.'}, status=400)
+
+        # Check if season is valid
+        if not re.match(r"\d{4}-\d{2}", season):
+            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
+        if int(season.split("-")[0]) < 1946 or int(season.split("-")[0]) > datetime.now().year:
+            return JsonResponse({'error': 'Invalid season. It should be between 1946-47 and this year.'}, status=400)
+        
         nba_teams = teams.get_teams()
         gamefinder = leaguegamefinder.LeagueGameFinder()
         games = gamefinder.get_data_frames()[0]  # Moved outside the loop
@@ -203,9 +214,8 @@ def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
         for team in nba_teams:
             team_id = team['id']
             team_name = team['full_name']
-
-           # Need to get the all the years season_ids and season and place them in an object array in constants file
-            season_id = "22018"  # replace with the season id you want to filter by
+            
+            season_id = "2" + season.split("-")[0]  # replace with the season id you want to filter by
             filtered_games = games.loc[(games['SEASON_ID'] == season_id) & (games['TEAM_ID'] == team_id)]
             team_total_pts = int(filtered_games[stat].sum())
             team_total_stats = {
