@@ -11,12 +11,12 @@ import { TeamLogos, getTeamLogo } from "../assets/constants/TeamLogos";
 import { TfiUser } from "react-icons/tfi"
 import { Link } from "react-router-dom"
 import { useDispatch } from "react-redux";
-import { setPlayerDataStore } from "../redux/playerDataSlice";
+import { setPlayerDataStore, setPlayerDataError } from "../redux/playerDataSlice";
 
 const StatCard = ({ key, stat }) => {
     const [playerData, setPlayerData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const fetchData = (stat) => {
       setIsLoading(true);
@@ -30,11 +30,13 @@ const StatCard = ({ key, stat }) => {
         .then(fetchedData => {
           const parsedData = JSON.parse(fetchedData);
           setPlayerData(parsedData);
-          dispatch(setPlayerDataStore(parsedData));
-          setIsLoading(false);
+          // dispatch(setPlayerDataStore(parsedData));
         })
         .catch(error => {
           console.log('Fetch error:', error);
+          // dispatch(setPlayerDataError(error.message));
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     }
@@ -128,6 +130,7 @@ const StatCard = ({ key, stat }) => {
             !isLoading && playerData.length > 0 && (
               <Link to={{
                 pathname: `/nba/stats/players/${stat.Stat}`,
+               
               }}>
                   <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
               </Link>

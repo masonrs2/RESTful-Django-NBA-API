@@ -48,3 +48,19 @@ export const LeadingStats = [
   { Abbreviation: "MIN", Stat: "Minutes" },
   { Abbreviation: "TOV", Stat: "Turnovers" },
 ];
+
+export const CompleteStatTypes = [
+  { Stat: "PLAYER_NAME", IsDecimal: false },
+  { Stat: "AGE", IsDecimal: false },
+  { Stat: "GP", IsDecimal: false },
+  { Stat: "PPG", IsDecimal: true },
+  { Stat: "REB", IsDecimal: false },
+  { Stat: "AST", IsDecimal: false },
+  { Stat: "STL", IsDecimal: false },
+  { Stat: "BLK", IsDecimal: false },
+  { Stat: "FG3A", IsDecimal: false },
+  { Stat: "FG3M", IsDecimal: false },
+  { Stat: "FG3_PCT", IsDecimal: true },
+  { Stat: "TOV", IsDecimal: false },
+  { Stat: "MIN", IsDecimal: true },
+]
