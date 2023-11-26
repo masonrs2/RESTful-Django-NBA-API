@@ -4,7 +4,8 @@ from ninja import NinjaAPI
 from nba_api.stats.endpoints import leaguegamefinder
 from nba_api.live.nba.endpoints import scoreboard
 from nba_api.live.nba.endpoints import boxscore
-from .constants.constants import all_stats_columns, GetTeamsDict
+from nba_api.stats.static import teams
+from .constants.constants import all_stats_columns, GetTeamsDict, GetTeamsList
 from .Enums.stats import Stats
 from ninja.errors import HttpError
 from datetime import timezone
@@ -190,6 +191,49 @@ def GetGameBoxScore(request, gameId: int):
         print("An error occurred:", e)
         raise HttpError(500,"Invalid Query Parameter Passed.")
     return json.dumps(box)
+
+@api.get("/leadingTeamStats")
+def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
+    try: 
+        nba_teams = teams.get_teams()
+        gamefinder = leaguegamefinder.LeagueGameFinder()
+        games = gamefinder.get_data_frames()[0]  # Moved outside the loop
+        team_stats_list = []
+        # Loop through all teams and get their game logs
+        for team in nba_teams:
+            team_id = team['id']
+            team_name = team['full_name']
+
+           # Need to get the all the years season_ids and season and place them in an object array in constants file
+            season_id = "22018"  # replace with the season id you want to filter by
+            filtered_games = games.loc[(games['SEASON_ID'] == season_id) & (games['TEAM_ID'] == team_id)]
+            team_total_pts = int(filtered_games[stat].sum())
+            team_total_stats = {
+                "TEAM_ID": team_id,
+                "TEAM_NAME": team_name,
+                "TEAM_ABBREVIATION": team['abbreviation'],
+                "PTS": team_total_pts,
+                "STL": int(filtered_games['STL'].sum()),
+                "BLK": int(filtered_games['BLK'].sum()),
+                "REB": int(filtered_games['REB'].sum()),
+                "AST": int(filtered_games['AST'].sum()),
+                "FGM": int(filtered_games['FGM'].sum()),
+                "FGA": int(filtered_games['FGA'].sum()),
+                "FG3M": int(filtered_games['FG3M'].sum()),
+                "FG3A": int(filtered_games['FG3A'].sum()),
+                "FTM": int(filtered_games['FTM'].sum()),
+                "FTA": int(filtered_games['FTA'].sum()),
+                "TOV": int(filtered_games['TOV'].sum()),
+                "GP": len(filtered_games),
+                "PPG": team_total_pts / len(filtered_games)
+            }
+            team_stats_list.append(team_total_stats)
+            
+        team_stats_list = sorted(team_stats_list, key=lambda k: k[stat], reverse=True)
+        return JsonResponse(team_stats_list, safe=False)
+    except Exception as e:
+        print("An error occurred:", e)
+        raise HttpError(500,"Invalid Query Parameter Passed.")
 
 @api.post("/watchlist", response={201: PlayerSchema})
 def AddPlayerToWishlist(request, player: PlayerSchema):
