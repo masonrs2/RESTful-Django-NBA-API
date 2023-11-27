@@ -49,6 +49,35 @@ export const LeadingStats = [
   { Abbreviation: "TOV", Stat: "Turnovers" },
 ];
 
+export const LeadingTeamStats = [
+  { Abbreviation: "PPG", Stat: "Points" },
+  { Abbreviation: "FG3M", Stat: "3 Points Made" },
+  { Abbreviation: "TOV", Stat: "Turnovers" },
+  { Abbreviation: "REB", Stat: "Rebounds" },
+  { Abbreviation: "AST", Stat: "Assists" },
+  { Abbreviation: "STL", Stat: "Steals" },
+  { Abbreviation: "BLK", Stat: "Blocks" },
+  { Abbreviation: "FGM", Stat: "Field Goal Made" },
+  { Abbreviation: "FTM", Stat: "Free Throws Made" },
+
+];
+export const CompleteLeadingTeamStats = [
+  { Abbreviation: "PPG", Stat: "Points" },
+  { Abbreviation: "REB", Stat: "Rebounds" },
+  { Abbreviation: "BLK", Stat: "Blocks" },
+  { Abbreviation: "STL", Stat: "Steals" },
+  { Abbreviation: "TOV", Stat: "Turnovers" },
+  { Abbreviation: "AST" , Stat: "Assists"},
+  { Abbreviation: "FG3A", Stat: "3 Points Attempted" },
+  { Abbreviation: "FG3M", Stat: "3 Points Made" },
+  { Abbreviation: "FTA", Stat: "Free Throws Attempted" },
+  { Abbreviation: "FTM", Stat: "Free Throws Made" },
+  { Abbreviation: "FGA", Stat: "Field Goals Attempted" },
+  { Abbreviation: "FGM", Stat: "Field Goals Made" },
+  { Abbreviation: "TOV", Stat: "Turnovers" },
+  { Abbreviation: "GP", Stat: "Games Played" },
+];
+
 export const CompleteStatTypes = [
   { Stat: "PLAYER_NAME", IsDecimal: false },
   { Stat: "AGE", IsDecimal: false },

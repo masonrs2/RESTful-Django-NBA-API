@@ -1,3 +1,4 @@
+
 import json
 from typing import Optional, List
 from ninja import NinjaAPI
@@ -159,7 +160,7 @@ def GetGameBoxScore(request, gameId: int):
     return json.dumps(box)
 
 @api.get("/teamLeadingStats")
-def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
+def GetLeadingTeamStats(request, stat: str = "PTS", season: str = "2023-24"):
     try: 
         # Check if stat is valid
         if stat not in valid_team_stats:

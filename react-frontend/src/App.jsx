@@ -7,6 +7,7 @@ import { Provider } from "react-redux"
 import { store } from "./redux/store"
 import persistStore from "redux-persist/es/persistStore"
 import { PersistGate } from 'redux-persist/integration/react'
+import TeamLeadersTableCards from "./components/TeamLeadersTableCards"
 
 function App() {
   let Persistor = persistStore(store, {timeout: 10000});
@@ -19,6 +20,7 @@ function App() {
           <CompleteStatCategories />
             <Routes>
             <Route exact path="/nba/stats/:tableType/:stat" element={<CompletePlayerOrTeamStatsTable />} />
+            <Route exact path="/nba/leaders/team" element={<TeamLeadersTableCards />} />
               <Route path="/" element={
                 <>
                   
