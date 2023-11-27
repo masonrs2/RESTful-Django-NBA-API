@@ -17,7 +17,7 @@ function App() {
         <div className='bg-zinc-800 h-full w-screen'>
           <Navbar />
             <Routes>
-              <Route exact path="/nba/stats/players/:stat" element={<CompletePlayerStatsTable />} />
+            <Route exact path="/nba/stats/:tableType/:stat" element={<CompletePlayerStatsTable />} />
               <Route path="/" element={
                 <>
                   <CompleteStatCategories />

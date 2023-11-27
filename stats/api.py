@@ -4,6 +4,7 @@ from ninja import NinjaAPI
 from nba_api.stats.endpoints import leaguegamefinder
 from nba_api.live.nba.endpoints import scoreboard
 from nba_api.live.nba.endpoints import boxscore
+from nba_api.stats.endpoints import fantasywidget
 from nba_api.stats.static import teams
 from .constants.constants import all_stats_columns, GetTeamsDict, valid_team_stats
 from .Enums.stats import Stats
@@ -22,48 +23,12 @@ import re
 
 api = NinjaAPI()
 
-@api.get("/leadingPoints")
-def leadingScorers(request, season: str = "2023-24"):
+@api.get("/playerLeadingStats")
+def leadingScorers(request, stat: str = "PTS", season: str = "2023-24"):
     try:
         if not re.match(r"\d{4}-\d{2}", season):
             return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
-        return GetPlayerStats(season, Stats.POINTS_PER_GAME.value)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@api.get("/leadingAssists")
-def leadingAssists(request, season: str = "2023-24"):
-    try:
-        if not re.match(r"\d{4}-\d{2}", season):
-            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
-        return GetPlayerStats(season, Stats.ASSISTS.value)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@api.get("/leadingRebounds")
-def leadingRebounds(request, season: str = "2023-24"):
-    try:
-        if not re.match(r"\d{4}-\d{2}", season):
-            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
-        return GetPlayerStats(season, Stats.REBOUNDS.value)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@api.get("/leadingBlocks")
-def leadingBlocks(request, season: str = "2023-24"):
-    try:
-        if not re.match(r"\d{4}-\d{2}", season):
-            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
-        return GetPlayerStats(season, Stats.BLOCKS.value)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
-
-@api.get("/leadingSteals")
-def leadingSteals(request, season: str = "2023-24"):
-    try:
-        if not re.match(r"\d{4}-\d{2}", season):
-            return JsonResponse({'error': 'Invalid season format. It should be YYYY-YY.'}, status=400)
-        return GetPlayerStats(season, Stats.STEALS.value)
+        return GetPlayerStats(season, stat)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
@@ -193,7 +158,7 @@ def GetGameBoxScore(request, gameId: int):
         raise HttpError(500,"Invalid Query Parameter Passed.")
     return json.dumps(box)
 
-@api.get("/leadingTeamStats")
+@api.get("/teamLeadingStats")
 def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
     try: 
         # Check if stat is valid
@@ -241,6 +206,24 @@ def GetLeadingTeamStats(request, stat: str, season: str = "2023-24"):
             
         team_stats_list = sorted(team_stats_list, key=lambda k: k[stat], reverse=True)
         return JsonResponse(team_stats_list, safe=False)
+    except Exception as e:
+        print("An error occurred:", e)
+        raise HttpError(500,"Invalid Query Parameter Passed.")
+
+@api.get("/fantasyStats")
+def GetFantasyStats(request):
+    # add a stat param, have it set to default, if the stat is default just return the list of all players fantasy
+    # stats in no particular order, if the stat is not default, sort the list of players by that stat
+    try:
+        fw = fantasywidget.FantasyWidget()
+
+        # Get the data
+        data_frames = fw.get_data_frames()
+
+        # data_frames is a list of pandas DataFrames. You can access individual DataFrames like this:
+        df0 = data_frames[0]
+        return df0.to_json(orient='records')
+    
     except Exception as e:
         print("An error occurred:", e)
         raise HttpError(500,"Invalid Query Parameter Passed.")

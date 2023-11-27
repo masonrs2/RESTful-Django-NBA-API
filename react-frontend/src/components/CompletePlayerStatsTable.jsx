@@ -12,7 +12,7 @@ import {
 import { CompleteStatTypes } from '../assets/constants/StatTypes';
 
 const CompletePlayerStatsTable = () => {
-    const { stat } = useParams();
+    const { stat, tableType } = useParams();
     const [completePlayerData, setCompletePlayerData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
   //   const playerData = useSelector((state) => state.playerData);
@@ -48,40 +48,70 @@ const CompletePlayerStatsTable = () => {
   },[])
 
   return (
-    <div className="flex flex-col p-20 w-full h-full text-black">
-      <div className="w-full flex flex-col ">
-        <h1 className="w-full" >Scoring</h1>
-        <Table className="table-auto">
-          <TableBody>
-            <TableRow className="">
-              {
-                CompleteStatTypes.map((tableColumnStat, index) => (
-                  <TableCell key={index}>{tableColumnStat.Stat}</TableCell>
-                ))
-              }
-            </TableRow>
-          </TableBody>
-        </Table>
+    <div className="flex flex-col  w-full h-full text-black">
+      <div className=" flex w-screen flex-col px-16 ">
+        <div className="flex mb-8 flex-col mt-28  bg-zinc-900 w-screen ">
+          <h1 className=" flex text-4xl font-semibold tracking-wide " >{stat}</h1>
+          <ul className="flex mt-6 gap-6 text-gray-400 font-light tracking-wide">
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Player Leaders</li>
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Team Leaders</li>
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Player Stats</li>
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Team Stats</li>
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Fantasy Stats</li>
+            <li className="cursor-pointer hover:text-blue-600 active:text-blue-500">Live Leaders</li>
+        </ul>
+        </div>
+        <div className="bg-zinc-900 outline outline-gray-500 outline-[.5px]">
+          <h1 className="p-3 px-5 flex outline outline-[.5px] outline-gray-500">{stat} Per Game</h1>
+          <Table className="table-auto bg-zinc-90 outline outline-[.5px] outline-gray-500">
+            <TableBody className="">
+              <TableRow className="flex outline outline-gray-500 outline-[.5px] hover:bg-zinc-800/60">
+                {
+                  CompleteStatTypes.map((tableColumnStat, index) => (
+                    index === 0 
+                    ? (
+                      <TableCell key={index} className="flex-1 w-[260px]"><p className="w-[260px]">{tableColumnStat.Stat}</p></TableCell>
+                    )
+                    : (
+                      <TableCell key={index} className="flex-1">{tableColumnStat.Stat}</TableCell>
+                    )
 
-        <div className="">
-          <Table className="table-auto">
-            <TableBody>
-            {
-              completePlayerData && completePlayerData.length > 0 && completePlayerData.slice(0,50).map((player, index) => (
-                <TableRow key={index}>
-                  {
-                    CompleteStatTypes.map((statType, idx) => (
-                      idx === 0 
-                      ? (<TableCell className="w-10 flex pr-[104px] bg-red-400">{player.PLAYER_NAME}</TableCell>)
-                      : (<TableCell key={idx}>{statType.IsDecimal ? (player[statType.Stat] ? player[statType.Stat].toFixed(1) : '') : player[statType.Stat] || ''}</TableCell>)
-                    ))
-                  }
-                </TableRow>
-              ))
-            }
+                    
+                  ))
+                }
+              </TableRow>
             </TableBody>
           </Table>
         </div>
+
+<div className="outline outline-gray-500 outline-[.5px]">
+  <Table className="table-auto bg-zinc-900 outline outline-gray-500 outline-[.5px]">
+    <TableBody className="">
+    {
+      completePlayerData && completePlayerData.length > 0 && completePlayerData.slice(0,50).map((player, index) => (
+        <TableRow key={index} className="flex hover:bg-zinc-800/60">
+          {
+            CompleteStatTypes.map((statType, idx) => (
+              idx === 0 
+              ? (<TableCell className="flex-1">
+                    <p className="flex gap-4 items-center font-light w-[230px]">
+                      {player?.PLAYER_NAME} 
+                      <div className="flex flex-row gap-1">
+                        ({player?.AGE}) 
+                        <p>•</p> {player?.TEAM_ABBREVIATION}
+                      </div>
+                    </p>
+                  </TableCell>
+                )
+              : (<TableCell key={idx} className="flex-1">{statType.IsDecimal ? (player[statType.Stat] ? player[statType.Stat].toFixed(1) : '') : player[statType.Stat] || 'n/a'}</TableCell>)
+            ))
+          }
+        </TableRow>
+      ))
+    }
+    </TableBody>
+  </Table>
+</div>
       </div>
     </div>
   )

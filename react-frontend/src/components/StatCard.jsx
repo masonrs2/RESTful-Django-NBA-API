@@ -20,7 +20,7 @@ const StatCard = ({ key, stat }) => {
 
     const fetchData = (stat) => {
       setIsLoading(true);
-      fetch(`http://127.0.0.1:8000/api/leading${stat}?season=2023-24`)
+      fetch(`http://127.0.0.1:8000/api/playerLeadingStats?stat=${stat}`)
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -42,7 +42,7 @@ const StatCard = ({ key, stat }) => {
     }
   
     useEffect(() => {
-        fetchData(stat.Stat);  
+        fetchData(stat.Abbreviation);  
     }, []);
   
     useEffect(() => {
