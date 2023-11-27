@@ -64,3 +64,8 @@ export const CompleteStatTypes = [
   { Stat: "TOV", IsDecimal: false },
   { Stat: "MIN", IsDecimal: true },
 ]
+
+export const GetStatName = (stat) => {
+  const statObject = LeadingStats.find((s) => s.Abbreviation === stat);
+  return statObject ? statObject.Stat : stat;
+}

@@ -129,7 +129,7 @@ const StatCard = ({ key, stat }) => {
           {
             !isLoading && playerData.length > 0 && (
               <Link to={{
-                pathname: `/nba/stats/players/${stat.Stat}`,
+                pathname: `/nba/stats/players/${stat.Abbreviation}`,
                
               }}>
                   <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
