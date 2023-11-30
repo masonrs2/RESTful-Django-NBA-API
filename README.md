@@ -21,51 +21,35 @@ The server will start running at `http://127.0.0.1:8000/`. You can access the AP
 
 ## API Endpoints
 
-1. `/api/{team}/{stat}`: Returns the players from the specified team who lead in the specified stat for the 2023-24 season.
-   - [team] The team's full name, abbreviation, or nickname (case-insensitive).
-   - [stat] The stat to sort by (case-insensitive).
-   - Example: `curl http://127.0.0.1:8000/api/stats/Lakers/pts`
+1. /api/playerLeadingStats: Returns the leading players for a given stat for a specified season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+- stat: The stat to sort by (case-insensitive). This is a required parameter.
+- season: The season in the format YYYY-YY. This is an optional parameter.
+- Example: curl 'http://127.0.0.1:8000/api/playerLeadingStats?stat=PTS&season=2022-23'
 
-2. `/api/schedule`: Returns the game results for a specified team for the 2023-24 season.
-   - `team`: The team's full name, abbreviation, or nickname (case-insensitive). This is a required parameter.
-   - `season`: The season for which to get game results. This is an optional parameter. If not provided, the default season is 2023-24.
-   - Example: `curl http://127.0.0.1:8000/api/schedule?team=Lakers` (This example defaults season=2023 since no input for the parameter was given)
+2. /api/{team}/{stat}: Returns the players from the specified team who lead in the specified stat for the 2023-24 season.
+- {team}: The team's full name, abbreviation, or nickname (case-insensitive). This is a required parameter.
+- {stat}: The stat to sort by (case-insensitive). This is a required parameter.
+- Example: curl 'http://127.0.0.1:8000/api/Lakers/pts'
 
-3. `/api/leadingScorers`: Returns the leading players in points for a given season entered by the user. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
-   - [stat] The stat to sort by (case-insensitive).
-   - `season`: The season in the format YYYY-YY. This is an optional parameter.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingScorers?season=2022-23`
+3. /api/schedule: Returns the game results for a specified team for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
+- team: The team's full name, abbreviation, or nickname (case-insensitive). This is a required parameter.
+- season: The season in the format YYYY-YY. This is an optional parameter.
+- Example: curl 'http://127.0.0.1:8000/api/schedule?team=Lakers&season=2022-23'
 
-4. `/api/leadingAssists`: Returns the leading players in assists for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
-   - [season]: The season in the format YYYY-YY. This is an optional parameter.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingAssists?season=2022-23`
+4. /api/fantasyStats: Returns the fantasy stats for all players.
+- No parameters required.
+- Example: curl 'http://127.0.0.1:8000/api/fantasyStats'
 
-5. `/api/leadingRebounds`: Returns the leading players in rebounds for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
-   - [season]: The season in the format YYYY-YY. This is an optional parameter.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingRebounds?season=2022-23`
+5. /api/watchlist: POST request to add a player to the user's watchlist.
+- player: The player details in JSON format. This is a required parameter.
+- Example: curl -X POST -d '{"username": "username123", "first_name": "Lebron", "last_name": "James", "team": "Lakers", "player_id": 2544}' http://127.0.0.1:8000/api/watchlist
 
-6. `/api/leadingBlocks`: Returns the leading players in blocks for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
-   - [season]: The season in the format YYYY-YY. This is an optional parameter.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingBlocks?season=2022-23`
+6. /api/watchlist: GET request to retrieve all players in the user's watchlist.
+- username: The username of the user. This is a required parameter.
+- Example: curl 'http://127.0.0.1:8000/api/watchlist?username=username123'
 
-7. `/api/leadingSteals`: Returns the leading players in steals for a given season. You can specify any season in the format YYYY-YY. If no season is specified, the default season is the latest season (2023-24).
-   - [season]: The season in the format YYYY-YY. This is an optional parameter.
-   - Example: `curl http://127.0.0.1:8000/api/stats/leadingSteals?season=2022-23`
-
-8. `/api/wishlist`: POST request to add a player to the user's watchlist.
-   - [first_name]: The first name of the player. This is a required parameter.
-   - [last_name]: The last name of the player. This is a required parameter.
-   - [team]: The team of the player. This is a required parameter.
-   - [player_id]: The unique ID of the player. This is a required parameter.
-   - Example: `curl -X POST -d '{"username": "username123", "first_name": "Lebron", "last_name": "James", "team": "Lakers", "player_id": 2544}' http://127.0.0.1:8000/api/watchlist`
-
-9. `/api/wishlist`: GET request to retrieve all players in the user's watchlist.
-   - No parameters required.
-   - Example: `curl http://127.0.0.1:8000/api/watchlist`
-
-10. [/api/watchlist] DELETE request to remove a player from the user's watchlist.
-   - [player_id]: The unique ID of the player. This is a required parameter.
-   - [username]: The username of the user. This is a required parameter.
-   - Example: `curl -X DELETE 'http://127.0.0.1:8000/api/watchlist?player_id=2544&username=username123'`
-
+7. /api/watchlist: DELETE request to remove a player from the user's watchlist.
+- player_id: The unique ID of the player. This is a required parameter.
+- username: The username of the user. This is a required parameter.
+- Example: curl -X DELETE 'http://127.0.0.1:8000/api/watchlist?player_id=2544&username=username123'
 
