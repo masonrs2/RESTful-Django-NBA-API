@@ -66,11 +66,11 @@ const CompletePlayerOrTeamStatsTable = () => {
   useEffect(() => {
     fetchData(stat);
     console.log("completePlayerDataaaa: ", completePlayerOrTeamData)
-  },[])
+  },[tableType])
 
   return (
     isLoading ? (<div>Loading...</div>) :
-    tableType === "players" ? (<CompletePlayerStatsTable stat={stat} completePlayerData={completePlayerOrTeamData} />) : (<CompleteTeamStatsTable stat={stat} completeTeamData={completePlayerOrTeamData} endpoint={tableType.slice(0,-1)} />)
+    tableType === "players" ? (<CompletePlayerStatsTable stat={stat} completePlayerData={completePlayerOrTeamData} />) : (<CompleteTeamStatsTable stat={stat} completeTeamData={completePlayerOrTeamData} />)
     )
   }
 

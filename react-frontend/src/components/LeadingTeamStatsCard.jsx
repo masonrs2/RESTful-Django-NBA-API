@@ -12,7 +12,7 @@ import { Link } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { setPlayerDataStore, setPlayerDataError } from "../redux/playerDataSlice";
 
-const LeadingTeamStatsCard = ({ key, stat }) => {
+const LeadingTeamStatsCard = ({ stat }) => {
     const [teamData, setTeamData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     // const dispatch = useDispatch();

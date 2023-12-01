@@ -7,7 +7,7 @@ const TeamLeadersTableCards = () => {
     <div className="w-screen h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 pt-8 px-12">
       {
         LeadingTeamStats.map((stat, index) => (
-          <LeadingTeamStatsCard key={index} stat={stat} />
+          <LeadingTeamStatsCard stat={stat} />
         ))
       }
     </div>

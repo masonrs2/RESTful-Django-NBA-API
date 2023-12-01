@@ -8,7 +8,7 @@ const CompleteTeamStatsTable = ({ stat, completeTeamData, endpoint }) => {
     console.log("stat11: ", stat)
     console.log("completePlayerData@@: ", completeTeamData)
     console.log("completePlayerData[0]: ", completeTeamData[0])
-    console.log("TableType: ", endpoint)
+  
   return (
     <div className="flex flex-col w-full h-full text-zinc-400 pt-8">
       <div className=" flex w-screen flex-col px-16 md:px-20 lg:px-24 xl:px-32 2xl:px-48 ">
