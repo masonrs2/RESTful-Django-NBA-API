@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import CompleteStatCategories from "./components/CompleteStatCategories"
+import SubNavStatCategories from "./components/SubNavStatCategories"
 import Navbar from "./components/Navbar"
 import { StatsLeadingCards } from "./components/StatsLeadingCards"
 import CompletePlayerOrTeamStatsTable from "./components/CompletePlayerOrTeamStatsTable"
@@ -17,7 +17,7 @@ function App() {
       {/* <PersistGate loading={null} persistor={Persistor}> */}
         <div className='bg-zinc-800 h-full w-screen'>
           <Navbar />
-          <CompleteStatCategories />
+          <SubNavStatCategories />
             <Routes>
             <Route exact path="/nba/stats/:tableType/:stat" element={<CompletePlayerOrTeamStatsTable />} />
             <Route exact path="/nba/leaders/team" element={<TeamLeadersTableCards />} />

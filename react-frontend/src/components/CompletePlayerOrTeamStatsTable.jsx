@@ -11,46 +11,66 @@ import {
 } from "@/components/ui/table";
 import { CompleteStatTypes, GetStatName } from '../assets/constants/StatTypes';
 import CompletePlayerStatsTable from './CompletePlayerStatsTable';
+import CompleteTeamStatsTable from './CompleteTeamStatsTable';
 
 const CompletePlayerOrTeamStatsTable = () => {
     const { stat, tableType } = useParams();
-    const [completePlayerData, setCompletePlayerData] = useState([]);
+    const [completePlayerOrTeamData, setCompletePlayerOrTeamData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
   //   const playerData = useSelector((state) => state.playerData);
-    
   //   if(playerData && playerData.data) {
   //     console.log("playerData!: ", playerData.data);
   // }
-  const fetchData = () => {
+  const fetchData = (statType) => {
     setIsLoading(true);
-    fetch(`http://127.0.0.1:8000/api/playerLeadingStats?stat=${stat}`)
-    .then(response => {
-      if(!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  
+    let endpoint = tableType.slice(0, -1);
+
+    console.log("endpoint: ", endpoint)
+    
+    if (endpoint === "team" && statType === "PPG") {
+      statType = 'PTS'
+    }
+    console.log("statType**: ", statType)
+    const url = `http://127.0.0.1:8000/api/${endpoint}LeadingStats?stat=${statType}`
+    
+    if (url) {
+      console.log("url: ", url)
+
+      fetch(url)
+      .then(response => {
+        if(!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(fetchedData => {
+        if(endpoint === "team") {
+          setCompletePlayerOrTeamData(fetchedData)
+        } else  {
+          const parsedData = JSON.parse(fetchedData);
+          setCompletePlayerOrTeamData(parsedData);  
+        }
+        
+      })
+      .catch(error => {
+        console.log('Fetch error:', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
       }
-      return response.json();
-    })
-    .then(fetchedData => {
-      const parsedData = JSON.parse(fetchedData);
-      setCompletePlayerData(parsedData);
-    })
-    .catch(error => {
-      console.log('Fetch error:', error);
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+    
   }
 
   useEffect(() => {
-    fetchData();
-    console.log("completePlayerData", stat)
-    console.log("type: ", tableType)
+    fetchData(stat);
+    console.log("completePlayerDataaaa: ", completePlayerOrTeamData)
   },[])
 
   return (
     isLoading ? (<div>Loading...</div>) :
-    tableType === "players" ? (<CompletePlayerStatsTable stat={stat} completePlayerData={completePlayerData} />) : (<div>Team Stats</div>)
+    tableType === "players" ? (<CompletePlayerStatsTable stat={stat} completePlayerData={completePlayerOrTeamData} />) : (<CompleteTeamStatsTable stat={stat} completeTeamData={completePlayerOrTeamData} endpoint={tableType.slice(0,-1)} />)
     )
   }
 

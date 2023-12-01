@@ -13,7 +13,7 @@ export const StatsNavList = [
     },
     {
         "name": "Team Stats",
-        "path": "/nba/stats/teams/PPG",
+        "path": "/nba/stats/teams/PTS",
     },
     {
         "name": "Fantasy Stats",

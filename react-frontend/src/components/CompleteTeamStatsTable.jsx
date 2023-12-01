@@ -1,11 +1,14 @@
-// PlayerStatsTable.jsx
-import React from 'react';
+import React, { useState } from 'react'
+import { CompleteLeadingTeamStats } from '../assets/constants/StatTypes';
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import { CompleteStatTypes, GetStatName } from '../assets/constants/StatTypes';
+import { GetStatName } from '../assets/constants/StatTypes';
 
-const CompletePlayerStatsTable = ({ stat, completePlayerData }) => {
+
+const CompleteTeamStatsTable = ({ stat, completeTeamData, endpoint }) => {
     console.log("stat11: ", stat)
-    console.log("completePlayerData11: ", completePlayerData)
+    console.log("completePlayerData@@: ", completeTeamData)
+    console.log("completePlayerData[0]: ", completeTeamData[0])
+    console.log("TableType: ", endpoint)
   return (
     <div className="flex flex-col w-full h-full text-zinc-400 pt-8">
       <div className=" flex w-screen flex-col px-16 md:px-20 lg:px-24 xl:px-32 2xl:px-48 ">
@@ -15,34 +18,33 @@ const CompletePlayerStatsTable = ({ stat, completePlayerData }) => {
             <TableBody className="">
               <TableRow className="flex outline outline-gray-500 outline-[.5px] hover:bg-zinc-800/60">
                 {
-                  CompleteStatTypes.map((tableColumnStat, index) => (
+                  CompleteLeadingTeamStats.map((tableColumnStat, index) => (
                     index === 0 
                     ? (
                       <TableCell key={index} className="flex-1 w-[260px]"><p className="w-[260px]">{tableColumnStat.Stat}</p></TableCell>
                     )
                     : (
-                        <TableCell key={index} className="flex-1">{tableColumnStat.Stat}</TableCell>
+                        <TableCell key={index} className="flex-1">{tableColumnStat.Abbreviation}</TableCell>
                       )
                         
                   ))
                 }
                   </TableRow>
-                  {completePlayerData.map((player, index) => (
+                  {completeTeamData.map((team, index) => (
                     <TableRow key={index} className="flex outline outline-gray-500 outline-[.5px] hover:bg-zinc-800/60">
                       {
-                        CompleteStatTypes.map((statType, idx) => (
+                        CompleteLeadingTeamStats.map((statType, idx) => (
                           idx === 0 
                           ? (<TableCell className="flex-1">
                                 <p className="flex gap-4 items-center font-medium w-[230px]">
-                                  {player?.PLAYER_NAME} 
-                                  <div className="flex flex-row gap-1 font-light text-sm  text-zinc-300">
-                                    ({player?.AGE}) 
-                                    <p>•</p> {player?.TEAM_ABBREVIATION}
+                                  {team?.TEAM_NAME}
+                                  <div className="flex flex-row gap-1 font-light text-xw  text-zinc-300">
+                                    ({team?.TEAM_ABBREVIATION})
                                   </div>
                                 </p>
                               </TableCell>
                             )
-                          : (<TableCell key={idx} className="flex-1">{statType.IsDecimal ? (player[statType.Stat] ? player[statType.Stat].toFixed(1) : '') : player[statType.Stat] || 'n/a'}</TableCell>)
+                          : (<TableCell key={idx} className="flex-1">{stat.IsDecimal ? (team[statType.Abbreviation] ? team[statType.Abbreviation].toFixed(1) : '') : team[statType.Abbreviation] || 'n/a'}</TableCell>)
                         ))
                       }
                     </TableRow>
@@ -54,6 +56,6 @@ const CompletePlayerStatsTable = ({ stat, completePlayerData }) => {
           </div>
         </div>
       );
-    };
-    
-export default CompletePlayerStatsTable;
+}
+
+export default CompleteTeamStatsTable

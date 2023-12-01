@@ -53,7 +53,7 @@ const StatCard = ({ key, stat }) => {
     }, [playerData])
 
   return (
-    <div className="flex flex-col text-zinc-400 font-medium bg-zinc-900 outline outline-[.5px] outline-gray-500 m-4">
+    <div className="flex flex-col text-zinc-400 font-medium bg-zinc-900 outline outline-[.5px] outline-gray-500 my-4 mr-4 lg:mr-6 xl:mr-8 mb-4 ">
       <h1 className="p-3 px-5 flex outline outline-[.5px] outline-gray-500">{stat?.Stat} Per Game</h1>
       <div className="outline outline-gray-500 outline-[.5px]">
         <Table className="">  
