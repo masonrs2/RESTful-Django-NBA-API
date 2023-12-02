@@ -69,7 +69,7 @@ const LeadingTeamStatsCard = ({ stat }) => {
                     <TableCell>
                     <div className="flex items-center gap-1">
                         <div className="w-9 h-9 rounded-full overflow-hidden flex items-center">
-                        <img className="object-cover" src={getTeamLogo(teamData[0]?.TEAM_ABBREVIATION)} alt={teamData[0]?.TEAM_ABBREVIATION} />
+                          <img className="object-cover" src={getTeamLogo(teamData[0]?.TEAM_ABBREVIATION)} alt={teamData[0]?.TEAM_ABBREVIATION} />
                         </div>
                         <div className="rounded-full overflow-hidden flex items-center">
                         </div>

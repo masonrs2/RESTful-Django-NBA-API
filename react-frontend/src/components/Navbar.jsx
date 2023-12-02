@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom"
+import { NavbarList } from "../assets/constants/NavbarList"
+
 const Navbar = () => {
   return (
         <nav className="bg-blue-700 dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-500 dark:border-gray-600">
@@ -17,18 +20,15 @@ const Navbar = () => {
             </div>
             <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                 <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-blue-700 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                <li>
-                    <a href="#" className="block py-2 px-3 text-white bg-black/80 rounded md:bg-transparent md:text-black/80 md:p-0 md:dark:text-black/80" aria-current="page">Home</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 px-3 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-zinc-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 px-3 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-zinc-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
-                </li>
-                <li>
-                    <a href="#" className="block py-2 px-3 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-zinc-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-                </li>
+                    {
+                        NavbarList.map((item, index) => (
+                            <Link key={index} to={{
+                                pathname: `${item.path}`,
+                            }} >
+                                <li key={index} className={`${index == 0 ? "text-black " : "text-gray-400"} cursor-pointer block py-2 px-3 text-gray-400 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-zinc-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}>{item.name}</li>
+                            </Link>
+                        ))
+                    }
                 </ul>
             </div>
             </div>
