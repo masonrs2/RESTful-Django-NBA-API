@@ -45,11 +45,11 @@ const NbaNews = () => {
       <div className='flex flex-col gap-6 text-zinc-400 lg:grid lg:grid-cols-2 2xl:grid-cols-3 ' >
         {
           newsData?.articles?.map((article, index) => (
-            <a href={article?.links?.web?.href}  key={index} className="flex lg:flex-col p-2 rounded-xl shadow-xl outline outline-1 outline-gray-400 cursor-pointer">
+            <a href={article?.links?.web?.href}  key={index} className="flex lg:flex-col p-2 rounded-xl shadow-xl outline outline-1 outline-gray-400 duration-200 hover:scale-105 cursor-pointer">
               <img className="w-64 xl:h-96 object-contain xl:object-cover lg:w-full rounded-xl" src={article?.images[0]?.url} />
               <div className="ml-4 lg:ml-0 mt-3" >
                 <h1 className="font-semibold text-md md:text-md lg:text-lg xl:text-xl ">{article?.headline}</h1>
-                <p className="text-zinc-300 text-sm md:text-md xl:text-lg">{TrimText(article?.description, 150)}</p>
+                <p className="text-zinc-300 text-sm md:text-md ">{TrimText(article?.description, 150)}</p>
                 <div className="flex gap-1 text-sm mt-2 text-gray-400 font-medium">
                   <p>{convertDateDay(article?.published.split('-')[2]?.split('T')[0])}d</p>
                   <p>•</p>

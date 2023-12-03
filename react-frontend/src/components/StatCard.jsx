@@ -47,7 +47,7 @@ const StatCard = ({ stat }) => {
   
     useEffect(() => {
       if (playerData.length > 0) {
-        console.log("Player 0", playerData[0].PLAYER_NAME);
+        console.log("Player 0", playerData[0]?.PLAYER_NAME);
         console.log("Player 1", playerData[1]);
       }
     }, [playerData])
@@ -99,12 +99,12 @@ const StatCard = ({ stat }) => {
               <TableHead>Rank</TableHead>
               <TableHead>Team</TableHead>
               <TableHead>Player</TableHead>
-              <TableHead>{stat?.Abbreviation.slice(0,1)}PG</TableHead>
+              <TableHead>{stat?.Abbreviation?.slice(0,1)}PG</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {
-              Array.isArray(playerData) &&  playerData.slice(1,6).map((player, index) => (
+              Array.isArray(playerData) &&  playerData?.slice(1,6)?.map((player, index) => (
                 <TableRow className="cursor-pointer border-t-[.5px] border-zinc-700 hover:bg-zinc-800/60" key={index+1}>
                     <TableCell className="font-semibold">{index+2}</TableCell>
                     <TableCell className="flex gap-4 items-center ">
@@ -115,8 +115,8 @@ const StatCard = ({ stat }) => {
                     <TableCell>{player?.PLAYER_NAME}</TableCell>
                     <TableCell className="font-light ">
                         {stat.Abbreviation === "PPG" 
-                            ? player[stat.Abbreviation].toFixed(1) 
-                            : (player[stat.Abbreviation] / player?.GP).toFixed(1)
+                            ? player[stat.Abbreviation]?.toFixed(1) 
+                            : (player[stat.Abbreviation] / player?.GP)?.toFixed(1)
                         }
                     </TableCell>
                 </TableRow>
@@ -127,9 +127,9 @@ const StatCard = ({ stat }) => {
 
         <div className="w-full flex items-center justify-center py-5 text-sm font-light tracking-wide border-t-[.5px] border-zinc-700 ">
           {
-            !isLoading && playerData.length > 0 && (
+            !isLoading && playerData?.length > 0 && (
               <Link to={{
-                pathname: `/nba/stats/players/${stat.Abbreviation}`,
+                pathname: `/nba/stats/players/${stat?.Abbreviation}`,
                
               }}>
                   <a className="hover:underline  hover:underline-offset-1  cursor-pointer hover:scale-105 hover:duration-200 hover:text-blue-500 active:text-blue-400 ">Complete {stat.Stat} Per Game</a>
