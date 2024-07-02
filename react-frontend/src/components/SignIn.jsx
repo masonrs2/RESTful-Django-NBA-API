@@ -60,7 +60,7 @@ const SignIn = () => {
     
                     <button onClick={logInWithEmail} className="mt-5 bg-gradient-to-r from-blue-500 via-pink-500 to-pink-300 rounded-md py-3 text-lg text-gray-100 font-medium ">Login</button>
     
-                    <p className="mt-6 mb-4 w-full justify-center text-gray-400 items-center flex">Don't have an account?<a href="/login"><span className="underline underline-offset-4 decoration-gray-200 ml-1 text-blue-500">Register here.</span></a> </p>
+                    <p className="mt-6 mb-4 w-full justify-center text-gray-400 items-center flex">Don't have an account?<a href="/register"><span className="underline underline-offset-4 decoration-gray-200 ml-1 text-blue-500">Register here.</span></a> </p>
                 </div>
             </div>
         </div>

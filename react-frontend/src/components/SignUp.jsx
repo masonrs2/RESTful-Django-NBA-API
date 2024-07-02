@@ -11,7 +11,49 @@ const SignUp = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [fullName, setFullName] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      console.log(`Cookie "${name}" Value:`, cookieValue); // Debugging line
+      return cookieValue;
+    }
+
+    const signUpWithEmail = (e) => {
+      try {
+        setIsLoading(true)
+        e.preventDefault();
+        const csrfToken = getCookie('csrftoken'); // Fetch the CSRF token from the cookies
+        fetch('http://127.0.0.1:8000/signup/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+          },
+          body: JSON.stringify({
+            username: email,
+            password1: password,
+            password2: password,
+          })
+        })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => console.log(error))
+        .finally(() => setIsLoading(false))
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
   return (
     <div className="bg-gradient-to-br from-zinc-900 via-black to-zinc-800 h-screen w-screen">
